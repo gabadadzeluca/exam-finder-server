@@ -16,8 +16,8 @@ SERVICE_ACCOUNT_FILE = 'keys.json'
 creds = service_account.Credentials.from_service_account_file(
         SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 
-SPREADSHEET_ID = "1eUABgVBLCX82ixJ8eCSqAm6hflPWZucKe5-rjcx9CsA"
-RANGE_NAME = "A1:F20"
+SPREADSHEET_ID = "1eUABgVBLCX82ixJ8eCSqAm6hflPWZucKe5-rjcx9CsA" #2025 I semester docs
+RANGE_NAME = "A1:F20" # Range of needed data;
 
 exams = []
 
@@ -39,9 +39,6 @@ def download_excel():
           as_attachment=True, 
           download_name='exams_excel.xlsx', 
           mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-
-
-
 
 def getExamData(uniGroup):
   exams = []; # intilize again to avoid accumulating data
