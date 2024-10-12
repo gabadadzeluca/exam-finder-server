@@ -5,6 +5,7 @@ from googleapiclient.errors import HttpError
 from google.oauth2 import service_account
 import openpyxl
 import io
+import json
 
 app = Flask(__name__)
 cors = CORS(app, origins="*")
@@ -32,9 +33,12 @@ def data():
 
 @app.route("/excel/download", methods=["GET"])
 def download_excel():
-  data = request.args.get('examData')
+  data = json.loads(request.args.get('examData'))
   output = excelHandler(data)
-  return send_file(output, as_attachment=True, attachment_filename='exams_excel.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+  return send_file(output, 
+          as_attachment=True, 
+          download_name='exams_excel.xlsx', 
+          mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 
 
@@ -77,13 +81,13 @@ def getExamData(uniGroup):
 
 def excelHandler(data):
   output = io.BytesIO()
+  
   try:
-    # try to load an existing workbook
+    # Try to load an existing workbook
     wb = openpyxl.load_workbook('exams_excel.xlsx')
     print("Workbook exists.")
-
   except FileNotFoundError:
-    # if doesnt exist, create a new one
+    # If doesn't exist, create a new one
     print("Workbook doesn't exist. Creating a new workbook.")
     wb = openpyxl.Workbook()
 
@@ -93,14 +97,15 @@ def excelHandler(data):
   for row_idx, row in enumerate(data):
     for col_idx, cell_value in enumerate(row):
       print(col_idx, cell_value)
-      if(col_idx == 6):
-        day, month = cell_value.split('/') 
-        sheet.cell(row=row_idx+1, column=col_idx+1, value=f"=DATE(2024,{month},DAY({day}))").number_format = "DD/MM/YYYY"
+      if col_idx == 6:
+        # date format is day/month
+        day, month = cell_value.split('/')
+        sheet.cell(row=row_idx + 1, column=col_idx + 1, value=f"=DATE(2024,{month},{day})").number_format = "DD/MM/YYYY"
       else:
-        sheet.cell(row=row_idx+1, column=col_idx+1, value=cell_value)
+        sheet.cell(row=row_idx + 1, column=col_idx + 1, value=cell_value)
 
   # Save the workbook
-  wb.save('exams_excel.xlsx')
+  wb.save(output)
   output.seek(0)  # Rewind the buffer to the beginning
   return output
 
