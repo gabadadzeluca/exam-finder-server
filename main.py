@@ -7,9 +7,7 @@ import openpyxl
 import io
 
 app = Flask(__name__)
-cors = CORS(app)
-
-GROUP_TO_FIND = '23-10-04'
+cors = CORS(app, origins="*")
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 SERVICE_ACCOUNT_FILE = 'keys.json'
@@ -22,18 +20,13 @@ RANGE_NAME = "A1:F20"
 
 exams = []
 
-@app.route("/api/users", methods=["GET"])
-def users():
+@app.route("/api/data", methods=["GET"])
+def data():
     uniGroup = request.args.get('uniGroup')
     examData = getExamData(uniGroup)
-    output = excelHandler(examData)
-    # download_excel(examData)
     return jsonify(
         {
-            "examData": [
-                "TEST", "TEST!"
-            ],
-            "data": examData
+          "examData": examData
         }
     )
 
@@ -47,6 +40,7 @@ def download_excel():
 
 
 def getExamData(uniGroup):
+  exams = []; # intilize again to avoid accumulating data
   try:
     service = build("sheets", "v4", credentials=creds)
 
