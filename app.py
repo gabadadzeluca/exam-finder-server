@@ -20,10 +20,9 @@ service_account_data = json.loads(service_account_info)
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
 # SERVICE_ACCOUNT_FILE = 'keys.json'
-SERVICE_ACCOUNT_FILE= json.loads(service_account_info)
 
 creds = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+        service_account_data, scopes=SCOPES)
 
 SPREADSHEET_ID = "1eUABgVBLCX82ixJ8eCSqAm6hflPWZucKe5-rjcx9CsA" #2025 I semester docs
 RANGE_NAME = "A1:F20" # Range of needed data;
