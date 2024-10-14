@@ -5,13 +5,22 @@ from googleapiclient.errors import HttpError
 from google.oauth2 import service_account
 import openpyxl
 import io
+import os
 import json
 
 app = Flask(__name__)
 cors = CORS(app, origins="*")
 
+# Load the JSON content from the environment variable
+service_account_info = os.getenv('GOOGLE_SERVICE_ACCOUNT_JSON')
+
+# Convert the JSON string back to a dictionary
+service_account_data = json.loads(service_account_info)
+
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
-SERVICE_ACCOUNT_FILE = 'keys.json'
+
+# SERVICE_ACCOUNT_FILE = 'keys.json'
+SERVICE_ACCOUNT_FILE= json.loads(service_account_info)
 
 creds = service_account.Credentials.from_service_account_file(
         SERVICE_ACCOUNT_FILE, scopes=SCOPES)
