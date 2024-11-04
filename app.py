@@ -10,7 +10,7 @@ import json
 
 app = Flask(__name__)
 # cors = CORS(app, origins="https://freeuni-examfinder.netlify.app")
-CORS(app, resources={r"/api/*": {"origins": "*"}, r"/excel/download": {"origins": "*"}})
+CORS(app, resources={r"/api/*": {"origins": "*"}, r"/excel/*": {"origins": "*"}})
 
 # Load the JSON content from the environment variable
 service_account_info = os.getenv('GOOGLE_SERVICE_ACCOUNT_JSON')
@@ -19,8 +19,6 @@ service_account_info = os.getenv('GOOGLE_SERVICE_ACCOUNT_JSON')
 service_account_data = json.loads(service_account_info)
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
-
-# SERVICE_ACCOUNT_FILE = 'keys.json'
 
 creds = service_account.Credentials.from_service_account_info(
         service_account_data, scopes=SCOPES)
