@@ -10,7 +10,7 @@ import json
 
 app = Flask(__name__)
 # cors = CORS(app, origins="https://freeuni-examfinder.netlify.app")
-CORS(app, resources={r"/api/*": {"origins": "*"}, r"/excel/*": {"origins": "*"}})
+CORS(app, resources={r"/api/*": {"origins": "*"}, r"/excel/download": {"origins": "https://freeuni-examfinder.netlify.app"}})
 
 # Load the JSON content from the environment variable
 service_account_info = os.getenv('GOOGLE_SERVICE_ACCOUNT_JSON')
