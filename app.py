@@ -38,7 +38,7 @@ def data():
         }
     )
 
-@app.route("/excel/download", methods=["GET"])
+@app.route("/excel/download", methods=["GET", "POST"])
 def download_excel():
   data = json.loads(request.args.get('examData'))
   output = excelHandler(data)
