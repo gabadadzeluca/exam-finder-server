@@ -40,7 +40,11 @@ def data():
 
 @app.route("/excel/download", methods=["GET", "POST"])
 def download_excel():
-  data = json.loads(request.args.get('examData'))
+  # Check if it's a POST request and read from JSON body
+  if request.method == "POST":
+      data = request.get_json().get('examData')
+  else:  # For GET requests, keep using query parameters
+      data = json.loads(request.args.get('examData'))
   output = excelHandler(data)
   return send_file(output, 
           as_attachment=True, 
